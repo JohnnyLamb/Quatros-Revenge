@@ -124,21 +124,21 @@ function gameLoop() {
         }
     }
     // checks for bullet collision/////////
-    for (var f = 0; f < enemyArray.length; f++) {
+    for (var b = 0; b < enemyArray.length; b++) {
         for (var j = 0; j < bullets.length; j++) {
-            if (bullets[j].x < enemyArray[f].x + enemyArray[f].w &&
-                bullets[j].x + bullets[j].w > enemyArray[f].x &&
-                bullets[j].y < enemyArray[f].y + enemyArray[f].h &&
-                bullets[j].y + bullets[j].h > enemyArray[f].y
+            if (bullets[j].x < enemyArray[b].x + enemyArray[b].w &&
+                bullets[j].x + bullets[j].w > enemyArray[b].x &&
+                bullets[j].y < enemyArray[b].y + enemyArray[b].h &&
+                bullets[j].y + bullets[j].h > enemyArray[b].y
             ) {
-                enemyArray.splice(f, 1);
+                enemyArray.splice(b, 1);
                 score++;
                 enemyDies.play();
             }
         }
     }
     //  destroys the enemy if they are too far off the screen////////////
-    for (var e = 0; e < enemyArray.length; e++) {
+    for (var n = 0; n < enemyArray.length; n++) {
         if (enemyArray[e].y > 1400) {
             enemyArray.shift();
         }

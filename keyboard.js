@@ -1,6 +1,5 @@
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-
 function keyDownHandler(event) {
     if (event.keyCode == 38) {
         upPressed = true;
@@ -16,7 +15,6 @@ function keyDownHandler(event) {
         spacePressed = true;
     }
 }
-
 function keyUpHandler(event) {
     if (event.keyCode == 38) {
         upPressed = false;

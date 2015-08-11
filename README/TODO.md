@@ -17,3 +17,5 @@
 
 7. add game loop to song
 
+8.explore set Interval and difference between requestanimationframe and why there is a bug with the latter but not the former when I use it
+

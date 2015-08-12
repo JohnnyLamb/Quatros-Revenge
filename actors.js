@@ -21,7 +21,6 @@ var drawYouLost = function() {
         document.location.reload();
     });
 };
-
 // PLAYER CODE ////////////////////////
 var player = function player(x, y, w, h) {
 
@@ -99,12 +98,10 @@ var fatties = function(x, y, w, h) {
     this.w = 60;
     this.h = 60;
 };
-
 fatties.prototype.moveFatty = function() {
     this.y -= -5;
 };
-fatties.prototype.drawFatty = function(){
+fatties.prototype.drawFatty = function() {
     ctx.fillStyle = "purple";
     ctx.fillRect(this.x, this.y, this.w, this.h);
 };
-

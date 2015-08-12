@@ -1,4 +1,3 @@
-
 var fattyArray = [new fatties()];
 var livesArray = [new life()];
 
@@ -11,10 +10,16 @@ var enemyArray = [new baddies(), new baddies(), new baddies(),
 var bullets = [];
 var player1 = new player();
 
+
+
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     player1.drawPlayer();
     player1.drawlife();
+    // commented out for experimentation with matching fatties with score markers
+    //     if(score = 50){
+    //     fattyArray.push(new fatties(),new fatties());
+    // }
 
     for (var f = 0; f < fattyArray.length; f++) {
         fattyArray[f].drawFatty();
@@ -29,9 +34,9 @@ function gameLoop() {
                 player.y + player.h > fattyArray[i].y
             ) {
                 fattyArray.splice(i, 1);
-                player1.w +=30;
-                player1.h +=30;
-                fattyArray.push(new fatties(),new fatties());
+                player1.w += 30;
+                player1.h += 30;
+                fattyArray.push(new fatties(), new fatties());
                 extraLife.play();
                 score += 50;
             }
@@ -39,7 +44,7 @@ function gameLoop() {
     }
     fattyCollision(player1, fattyArray);
 
-// if fatty is too far down screen respawn at top
+    // if fatty is too far down screen respawn at top
     for (var e = 0; e < fattyArray.length; e++) {
         if (fattyArray[e].y > 1400) {
             fattyArray.shift();
@@ -71,8 +76,8 @@ function gameLoop() {
     }
     lifeCollision(player1, livesArray);
 
-    for (var e = 0; e < livesArray.length; e++) {
-        if (livesArray[e].y > 6400) {
+    for (var z= 0; z < livesArray.length; z++) {
+        if (livesArray[z].y > 6400) {
             livesArray.shift();
             livesArray.push(new life());
         }
@@ -143,7 +148,7 @@ function gameLoop() {
         bullets.shift();
     }
     // player movement and shooting////////////////////
-    if (rightPressed && player1.x < 648) {
+    if (rightPressed && player1.x + player1.w < 680) {
         player1.x += 7;
     } else if (leftPressed && player1.x > 0) {
         player1.x -= 7;
@@ -164,40 +169,7 @@ function gameLoop() {
     drawscore();
 }
 // gameLoop();
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
 
-function keyDownHandler(event) {
-    if (event.keyCode == 38) {
-        upPressed = true;
-    } else if (event.keyCode == 40) {
-        downPressed = true;
-    }
-    if (event.keyCode == 37) {
-        leftPressed = true;
-    } else if (event.keyCode == 39) {
-        rightPressed = true;
-    }
-    if (event.keyCode == 32) {
-        spacePressed = true;
-    }
-}
-
-function keyUpHandler(event) {
-    if (event.keyCode == 38) {
-        upPressed = false;
-    } else if (event.keyCode == 40) {
-        downPressed = false;
-    }
-    if (event.keyCode == 37) {
-        leftPressed = false;
-    } else if (event.keyCode == 39) {
-        rightPressed = false;
-    }
-    if (event.keyCode == 32) {
-        spacePressed = false;
-    }
-}
 $(document).on("ready", function() {
     drawStart();
     song.play();

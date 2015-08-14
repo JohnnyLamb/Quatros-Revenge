@@ -57,7 +57,7 @@ baddies.prototype.moveBaddies = function() {
 };
 baddies.prototype.draw = function() {
     ctx.fillStyle = "red";
-    ctx.fillRect(this.x, this.y-600, 30, 30);
+    ctx.fillRect(this.x, this.y- 300, 30, 30);
 };
 var enemy1 =  new baddies(3,y);
 var enemy2 =  new baddies(93,y);
@@ -67,19 +67,20 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 
+    // enemy1.moveBaddies();
+    // enemy1.draw();
 
-
-    enemy1.moveBaddies();
-    enemy1.draw();
-
-    // enemy2.moveBaddies();
+    enemy2.moveBaddies();
     enemy2.draw();
 
 
     player();
-    // if (playerX === baddieX){
-    //     console.log(playerX);
-    // }
+    // console.log(playerX);
+    // console.log(enemy1.y);
+
+    if (playerX >= enemy2.x){
+        console.log('touch');
+    }
 
     // moves and draws new bullets to screen////////////
     if (bullets.length) {

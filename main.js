@@ -3,7 +3,8 @@ var ctx = canvas.getContext("2d");
 
 // canvas dimensions and variables to work with
 var x = canvas.width / 2;
-var y = canvas.height - 30;
+var y = canvas.height - 400;
+
 
 // keyboard movement
 var rightPressed = false;
@@ -12,14 +13,22 @@ var upPressed = false;
 var downPressed = false;
 var spacePressed = false;
 
+
 // BADDIE DIMENSIONS AND POSITIONS
-// var baddieX = x;
-// var baddieY = y - 500;
+var baddieX = 340-50;
+var baddieY = y - 700;
+var baddieWidth = 50;
+var baddieHeight = 50;
+
+
+
 // player dimensions and position
 var playerHeight = 30;
 var playerWidth = 30;
 var playerX = (canvas.width - playerWidth) / 2;
 var playerY = y / 1.2;
+
+
 // for keeping track of all the bullets
 
 
@@ -44,43 +53,69 @@ bullet.prototype.moveBullet = function() {
 };
 bullet.prototype.draw = function() {
     ctx.fillStyle = "orange";
-    ctx.fillRect(this.x + 10, this.y - 10, 10, 10);
+    ctx.fillRect(this.x + 10, this.y, 10, 10);
 };
 // BADDIES CODE////////////////////////////
-var enemiesArray =[];
-var baddies = function(x,y) {
+// var enemiesArray = [];
+var baddies = function(x, y) {
     this.x = x;
     this.y = y;
 };
 baddies.prototype.moveBaddies = function() {
     this.y -= -2;
 };
-baddies.prototype.draw = function() {
+baddies.prototype.drawBaddie = function() {
     ctx.fillStyle = "red";
-    ctx.fillRect(this.x, this.y- 300, 30, 30);
+    ctx.fillRect(this.x, this.y, 50, 50);
 };
-var enemy1 =  new baddies(3,y);
-var enemy2 =  new baddies(93,y);
+
+var enemy1 = new baddies(340, 190);
+
+// var enemy2 = new baddies(ba, baddieY);
 
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // PLAYER sides
+
+    var playerTopleft = playerX;
+    var playerTopright = playerX + playerWidth;
+    var playerBottomleft = playerX - playerHeight;
+    var playerBottomright = playerX - playerHeight + playerWidth;
+
+
+    var baddieTopleft = baddieX;
+    var baddieTopright = baddieX + baddieWidth;
+    var baddieBottomleft = baddieX - baddieHeight;
+    var baddieBottomright = baddieTopright - baddieHeight;
+
+
+
 
 
     // enemy1.moveBaddies();
-    // enemy1.draw();
-
-    enemy2.moveBaddies();
-    enemy2.draw();
-
+    enemy1.drawBaddie();
+    console.log(enemy1.x);
+    // console.log(x,y);
 
     player();
-    // console.log(playerX);
-    // console.log(enemy1.y);
 
-    if (playerX >= enemy2.x){
-        console.log('touch');
+
+    // console.log("x position " + playerX + " y position " + playerY);
+
+
+
+     console.log(playerY);
+     console.log(playerX);
+
+
+    //horizantol
+
+
+     if (playerY > baddieTopleft&& playerY < baddieTopleft + 50){
+            console.log('horizantol')
     }
+
 
     // moves and draws new bullets to screen////////////
     if (bullets.length) {
@@ -108,9 +143,10 @@ function draw() {
         playerY -= 7;
     }
     if (spacePressed) {
-       bullets.push(new bullet(playerX, playerY));
+        bullets.push(new bullet(playerX, playerY));
     }
 }
+
 
 
 document.addEventListener("keydown", keyDownHandler, false);

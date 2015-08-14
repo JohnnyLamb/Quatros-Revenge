@@ -1,10 +1,10 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-// canvas dimensions
+
+// canvas dimensions and variables to work with
 var x = canvas.width / 2;
 var y = canvas.height - 30;
-var updateX = 0;
-var updateY = -1;
+
 // keyboard movement
 var rightPressed = false;
 var leftPressed = false;
@@ -12,70 +12,104 @@ var upPressed = false;
 var downPressed = false;
 var spacePressed = false;
 
-
-
+// BADDIE DIMENSIONS AND POSITIONS
+// var baddieX = x;
+// var baddieY = y - 500;
 // player dimensions and position
 var playerHeight = 30;
 var playerWidth = 30;
 var playerX = (canvas.width - playerWidth) / 2;
 var playerY = y / 1.2;
-
-// bullet
-// var bulletposX = playerX;
-var bulletposY = y / 1.2;
+// for keeping track of all the bullets
 
 
-
-
-
-function drawBullet() {
-    ctx.beginPath();
-    ctx.rect(playerX+10, bulletposY, 10, 10);
-    ctx.fillStyle = "red";
-    ctx.fill();
-    ctx.closePath();
-}
-
-function drawPlayer() {
-    ctx.beginPath();
-    ctx.rect(playerX, playerY, playerWidth, playerHeight);
+// PLAYER CODE ////////////////////////
+var player = function drawPlayer() {
     ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
-}
+    ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
+    this.life = 3;
+};
+player.prototype.kill = function() {
+    this.life = -1;
+};
+
+// BULLET CODE
+var bullets = [];
+var bullet = function(x, y) {
+    this.x = x;
+    this.y = y;
+};
+bullet.prototype.moveBullet = function() {
+    this.y -= 16;
+};
+bullet.prototype.draw = function() {
+    ctx.fillStyle = "orange";
+    ctx.fillRect(this.x + 10, this.y - 10, 10, 10);
+};
+// BADDIES CODE////////////////////////////
+var enemiesArray =[];
+var baddies = function(x,y) {
+    this.x = x;
+    this.y = y;
+};
+baddies.prototype.moveBaddies = function() {
+    this.y -= -2;
+};
+baddies.prototype.draw = function() {
+    ctx.fillStyle = "red";
+    ctx.fillRect(this.x, this.y-600, 30, 30);
+};
+var enemy1 =  new baddies(3,y);
+var enemy2 =  new baddies(93,y);
+
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    newBullet();
-    drawPlayer();
 
-    if (rightPressed) {
+
+
+
+    enemy1.moveBaddies();
+    enemy1.draw();
+
+    // enemy2.moveBaddies();
+    enemy2.draw();
+
+
+    player();
+    // if (playerX === baddieX){
+    //     console.log(playerX);
+    // }
+
+    // moves and draws new bullets to screen////////////
+    if (bullets.length) {
+        for (var i = 0; i < bullets.length; i++) {
+            bullets[i].moveBullet();
+            bullets[i].draw();
+        }
+    }
+    // limits the amount of bullets in the bullets array///
+    if (bullets.length > 80) {
+        bullets.shift();
+    }
+    // player movement and shooting////////////////////
+
+    if (rightPressed && playerX < 648) {
         playerX += 7;
-    } else if (leftPressed) {
+    } else if (leftPressed && playerX > 0) {
         playerX -= 7;
     }
-    if (downPressed) {
+
+
+    if (downPressed && playerY < 588) {
         playerY += 7;
-    } else if (upPressed) {
+    } else if (upPressed && playerY > 0) {
         playerY -= 7;
     }
-
-    function newBullet(){
-
     if (spacePressed) {
-        console.log('newBullet function');
-        drawBullet();
+       bullets.push(new bullet(playerX, playerY));
     }
-
-    // bulletposY += updateY;
 }
-
-}
-
-
-
-
-
 
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -96,7 +130,7 @@ function keyDownHandler(event) {
         spacePressed = true;
     }
 }
-// up arrow is 38, down arrow is 40, space bar is 32
+
 function keyUpHandler(event) {
     if (event.keyCode == 38) {
         upPressed = false;
@@ -112,5 +146,4 @@ function keyUpHandler(event) {
         spacePressed = false;
     }
 }
-
-setInterval(draw, 10);
+setInterval(draw, 20);

@@ -5,7 +5,6 @@ var ctx = canvas.getContext("2d");
 var x = canvas.width / 2;
 var y = canvas.height - 400;
 
-
 // keyboard movement
 var rightPressed = false;
 var leftPressed = false;
@@ -13,141 +12,154 @@ var upPressed = false;
 var downPressed = false;
 var spacePressed = false;
 
-
 // BADDIE DIMENSIONS AND POSITIONS
-var baddieX = 340-50;
+var baddieX = 340;
 var baddieY = y - 700;
-var baddieWidth = 50;
-var baddieHeight = 50;
-
-
+// var baddieWidth = 50;
+// var baddieHeight = 50;
 
 // player dimensions and position
-var playerHeight = 30;
-var playerWidth = 30;
-var playerX = (canvas.width - playerWidth) / 2;
-var playerY = y / 1.2;
-
-
-// for keeping track of all the bullets
 
 
 // PLAYER CODE ////////////////////////
-var player = function drawPlayer() {
-    ctx.fillStyle = "#0095DD";
-    ctx.fillRect(playerX, playerY, playerWidth, playerHeight);
+var player = function player(x, y, w, h) {
+
+    this.w = 30;
+    this.h = 30;
+    this.x = (canvas.width - this.w) / 2;
+    this.y =  canvas.height / 1.2;
     this.life = 3;
 };
 player.prototype.kill = function() {
-    this.life = -1;
+    this.life -= 1;
 };
-
+player.prototype.drawPlayer = function() {
+    ctx.fillStyle = "#0095DD";
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+};
 // BULLET CODE
-var bullets = [];
-var bullet = function(x, y) {
+
+var bullet = function(x, y, w, h) {
     this.x = x;
     this.y = y;
+    this.w = 10;
+    this.h = 10;
+
 };
 bullet.prototype.moveBullet = function() {
     this.y -= 16;
 };
 bullet.prototype.draw = function() {
     ctx.fillStyle = "orange";
-    ctx.fillRect(this.x + 10, this.y, 10, 10);
+    ctx.fillRect(this.x+10, this.y, 10, 10);
 };
 // BADDIES CODE////////////////////////////
 // var enemiesArray = [];
-var baddies = function(x, y) {
-    this.x = x;
-    this.y = y;
+var baddies = function(x, y, w, h) {
+    this.x = Math.random() * 600;
+    this.y = Math.random() * -600;
+    this.w = 30;
+    this.h = 30;
 };
 baddies.prototype.moveBaddies = function() {
-    this.y -= -2;
+    this.y -= -4;
 };
 baddies.prototype.drawBaddie = function() {
     ctx.fillStyle = "red";
-    ctx.fillRect(this.x, this.y, 50, 50);
+    ctx.fillRect(this.x, this.y, this.w, this.h);
 };
+var enemyArray = [new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies()];
 
-var enemy1 = new baddies(340, 190);
+var bullets = [];
 
-// var enemy2 = new baddies(ba, baddieY);
 
+var player1 = new player();
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // PLAYER sides
-
-    var playerTopleft = playerX;
-    var playerTopright = playerX + playerWidth;
-    var playerBottomleft = playerX - playerHeight;
-    var playerBottomright = playerX - playerHeight + playerWidth;
-
-
-    var baddieTopleft = baddieX;
-    var baddieTopright = baddieX + baddieWidth;
-    var baddieBottomleft = baddieX - baddieHeight;
-    var baddieBottomright = baddieTopright - baddieHeight;
+    player1.drawPlayer();
 
 
 
+    if(enemyArray.length < 8){
+        enemyArray.push(new baddies());
 
-
-    // enemy1.moveBaddies();
-    enemy1.drawBaddie();
-    console.log(enemy1.x);
-    // console.log(x,y);
-
-    player();
-
-
-    // console.log("x position " + playerX + " y position " + playerY);
-
-
-
-     console.log(playerY);
-     console.log(playerX);
-
-
-    //horizantol
-
-
-     if (playerY > baddieTopleft&& playerY < baddieTopleft + 50){
-            console.log('horizantol')
     }
+
+
+    for (var i = 0; i < enemyArray.length; i++) {
+        enemyArray[i].drawBaddie();
+        enemyArray[i].moveBaddies();
+    }
+
+
+    function checkCollision(player, enemyArray) {
+        for (var i = 0; i < enemyArray.length; i++) {
+            if (player.x < enemyArray[i].x + enemyArray[i].w &&
+                player.x + player.w > enemyArray[i].x &&
+                player.y < enemyArray[i].y + enemyArray[i].h &&
+                player.y + player.h > enemyArray[i].y
+            ) {
+                player1.y +=35;
+                player1.kill();
+                console.log(player1.life);
+            }
+        }
+    }
+    // console.log(player1);
+    checkCollision(player1, enemyArray);
 
 
     // moves and draws new bullets to screen////////////
     if (bullets.length) {
-        for (var i = 0; i < bullets.length; i++) {
-            bullets[i].moveBullet();
-            bullets[i].draw();
+        for (var k = 0; k < bullets.length; k++) {
+
+            bullets[k].moveBullet();
+            bullets[k].draw();
+
         }
     }
+
+    if (enemyArray.length) {
+        for (var f = 0; f < enemyArray.length; f++) {
+            for (var j = 0; j < bullets.length; j++) {
+
+                if (bullets[j].x < enemyArray[f].x + enemyArray[f].w &&
+                    bullets[j].x + bullets[j].w > enemyArray[f].x &&
+                    bullets[j].y < enemyArray[f].y + enemyArray[f].h &&
+                    bullets[j].y + bullets[j].h > enemyArray[f].y
+                ) {
+                        enemyArray.splice(f,1);
+                        console.log('hey');
+                }
+
+            }
+        }
+    }
+
+
     // limits the amount of bullets in the bullets array///
     if (bullets.length > 80) {
         bullets.shift();
     }
     // player movement and shooting////////////////////
 
-    if (rightPressed && playerX < 648) {
-        playerX += 7;
-    } else if (leftPressed && playerX > 0) {
-        playerX -= 7;
+    if (rightPressed && player1.x < 648) {
+        player1.x += 7;
+    } else if (leftPressed && player1.x > 0) {
+        player1.x -= 7;
     }
 
-
-    if (downPressed && playerY < 588) {
-        playerY += 7;
-    } else if (upPressed && playerY > 0) {
-        playerY -= 7;
+    if (downPressed && player1.y < 588) {
+        player1.y += 7;
+    } else if (upPressed && player1.y > 0) {
+        player1.y -= 7;
     }
     if (spacePressed) {
-        bullets.push(new bullet(playerX, playerY));
+        bullets.push(new bullet(player1.x, player1.y));
+
     }
 }
-
-
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -184,3 +196,30 @@ function keyUpHandler(event) {
     }
 }
 setInterval(draw, 20);
+
+
+
+function bulletCollision(bulletsArray, enemyArray) {
+        for (var i = 0; i < enemyArray.length; i++) {
+            for (var j =0; j < bulletsArray.length; j++){
+            if (bulletsArray[j].x < enemyArray[i].x + enemyArray[i].w &&
+                bulletsArray[j].x + bulletsArray[j].w > enemyArray[i].x &&
+                bulletsArray[j].y < enemyArray[i].y + enemyArray[i].h &&
+                bulletsArray[j].y + bulletsArray[j].h > enemyArray[i].y
+            ) {
+                console.log("bullet collision");
+            }
+        }
+    }
+}
+bulletCollision(bullets, enemyArray);
+
+
+
+function bulletCollision(bulletsArray, enemyArray) {
+        for (var i = 0; i < bulletsArray.length; i++) {
+            checkCollision(bulletsArray[i], enemyArray);
+            // console.log('hey');
+        }
+    }
+    bulletCollision(bullets, enemyArray);

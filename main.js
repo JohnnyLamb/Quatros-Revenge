@@ -5,9 +5,6 @@ var ctx = canvas.getContext("2d");
 var x = canvas.width / 2;
 var y = canvas.height - 400;
 
-//
-var score = 0;
-
 // keyboard movement
 var rightPressed = false;
 var leftPressed = false;
@@ -16,7 +13,7 @@ var downPressed = false;
 var spacePressed = false;
 
 //  DRAW SCORE TO SCREEN
-
+var score = 0;
 var drawscore = function() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
@@ -88,7 +85,7 @@ function gameLoop() {
     player1.drawPlayer();
     player1.drawlife();
     // this instantiates new baddies so the game continues//////////
-    if (enemyArray.length < 8) {
+    if (enemyArray.length < 15) {
         enemyArray.push(new baddies());
     }
     // this draws the array of baddies and moves the baddies down the screen///////////

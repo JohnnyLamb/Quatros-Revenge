@@ -27,7 +27,7 @@ var player = function player(x, y, w, h) {
     this.w = 30;
     this.h = 30;
     this.x = (canvas.width - this.w) / 2;
-    this.y =  canvas.height / 1.2;
+    this.y = canvas.height / 1.2;
     this.life = 3;
 };
 player.prototype.kill = function() {
@@ -51,7 +51,7 @@ bullet.prototype.moveBullet = function() {
 };
 bullet.prototype.draw = function() {
     ctx.fillStyle = "orange";
-    ctx.fillRect(this.x+10, this.y, 10, 10);
+    ctx.fillRect(this.x + 10, this.y, 10, 10);
 };
 // BADDIES CODE////////////////////////////
 // var enemiesArray = [];
@@ -62,13 +62,17 @@ var baddies = function(x, y, w, h) {
     this.h = 30;
 };
 baddies.prototype.moveBaddies = function() {
+
     this.y -= -4;
 };
 baddies.prototype.drawBaddie = function() {
     ctx.fillStyle = "red";
     ctx.fillRect(this.x, this.y, this.w, this.h);
 };
-var enemyArray = [new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies()];
+var enemyArray = [new baddies(), new baddies(), new baddies(),
+    new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies(),
+    new baddies(), new baddies()
+];
 
 var bullets = [];
 
@@ -79,19 +83,13 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     player1.drawPlayer();
 
-
-
-    if(enemyArray.length < 8){
+    if (enemyArray.length < 8) {
         enemyArray.push(new baddies());
-
     }
-
-
     for (var i = 0; i < enemyArray.length; i++) {
         enemyArray[i].drawBaddie();
         enemyArray[i].moveBaddies();
     }
-
 
     function checkCollision(player, enemyArray) {
         for (var i = 0; i < enemyArray.length; i++) {
@@ -100,7 +98,7 @@ function draw() {
                 player.y < enemyArray[i].y + enemyArray[i].h &&
                 player.y + player.h > enemyArray[i].y
             ) {
-                player1.y +=35;
+                player1.y += 35;
                 player1.kill();
                 console.log(player1.life);
             }
@@ -119,25 +117,25 @@ function draw() {
 
         }
     }
+    // checks for bullet collision/////////
+    for (var f = 0; f < enemyArray.length; f++) {
+        for (var j = 0; j < bullets.length; j++) {
 
-    if (enemyArray.length) {
-        for (var f = 0; f < enemyArray.length; f++) {
-            for (var j = 0; j < bullets.length; j++) {
-
-                if (bullets[j].x < enemyArray[f].x + enemyArray[f].w &&
-                    bullets[j].x + bullets[j].w > enemyArray[f].x &&
-                    bullets[j].y < enemyArray[f].y + enemyArray[f].h &&
-                    bullets[j].y + bullets[j].h > enemyArray[f].y
-                ) {
-                        enemyArray.splice(f,1);
-                        console.log('hey');
-                }
-
+            if (bullets[j].x < enemyArray[f].x + enemyArray[f].w &&
+                bullets[j].x + bullets[j].w > enemyArray[f].x &&
+                bullets[j].y < enemyArray[f].y + enemyArray[f].h &&
+                bullets[j].y + bullets[j].h > enemyArray[f].y
+            ) {
+                enemyArray.splice(f, 1);
             }
         }
     }
-
-
+    //  destroys the enemy if they are too far off the screen////////////
+    for (var e = 0; e < enemyArray.length; e++) {
+        if (enemyArray[e].y > 1400) {
+            enemyArray.shift();
+        }
+    }
     // limits the amount of bullets in the bullets array///
     if (bullets.length > 80) {
         bullets.shift();
@@ -197,29 +195,25 @@ function keyUpHandler(event) {
 }
 setInterval(draw, 20);
 
+// function bulletCollision(bulletsArray, enemyArray) {
+//     for (var i = 0; i < enemyArray.length; i++) {
+//         for (var j = 0; j < bulletsArray.length; j++) {
+//             if (bulletsArray[j].x < enemyArray[i].x + enemyArray[i].w &&
+//                 bulletsArray[j].x + bulletsArray[j].w > enemyArray[i].x &&
+//                 bulletsArray[j].y < enemyArray[i].y + enemyArray[i].h &&
+//                 bulletsArray[j].y + bulletsArray[j].h > enemyArray[i].y
+//             ) {
+//                 console.log("bullet collision");
+//             }
+//         }
+//     }
+// }
+// bulletCollision(bullets, enemyArray);
 
-
-function bulletCollision(bulletsArray, enemyArray) {
-        for (var i = 0; i < enemyArray.length; i++) {
-            for (var j =0; j < bulletsArray.length; j++){
-            if (bulletsArray[j].x < enemyArray[i].x + enemyArray[i].w &&
-                bulletsArray[j].x + bulletsArray[j].w > enemyArray[i].x &&
-                bulletsArray[j].y < enemyArray[i].y + enemyArray[i].h &&
-                bulletsArray[j].y + bulletsArray[j].h > enemyArray[i].y
-            ) {
-                console.log("bullet collision");
-            }
-        }
-    }
-}
-bulletCollision(bullets, enemyArray);
-
-
-
-function bulletCollision(bulletsArray, enemyArray) {
-        for (var i = 0; i < bulletsArray.length; i++) {
-            checkCollision(bulletsArray[i], enemyArray);
-            // console.log('hey');
-        }
-    }
-    bulletCollision(bullets, enemyArray);
+// function bulletCollision(bulletsArray, enemyArray) {
+//     for (var i = 0; i < bulletsArray.length; i++) {
+//         checkCollision(bulletsArray[i], enemyArray);
+//         // console.log('hey');
+//     }
+// }
+// bulletCollision(bullets, enemyArray);

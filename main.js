@@ -5,6 +5,9 @@ var ctx = canvas.getContext("2d");
 var x = canvas.width / 2;
 var y = canvas.height - 400;
 
+//
+var score = 0;
+
 // keyboard movement
 var rightPressed = false;
 var leftPressed = false;
@@ -12,14 +15,13 @@ var upPressed = false;
 var downPressed = false;
 var spacePressed = false;
 
-// BADDIE DIMENSIONS AND POSITIONS
-var baddieX = 340;
-var baddieY = y - 700;
-// var baddieWidth = 50;
-// var baddieHeight = 50;
+//  DRAW SCORE TO SCREEN
 
-// player dimensions and position
-
+var drawscore = function() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Score: " + score, 8, 20);
+};
 
 // PLAYER CODE ////////////////////////
 var player = function player(x, y, w, h) {
@@ -29,6 +31,11 @@ var player = function player(x, y, w, h) {
     this.x = (canvas.width - this.w) / 2;
     this.y = canvas.height / 1.2;
     this.life = 3;
+};
+player.prototype.drawlife = function() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("LIFE: " + this.life, 600, 20);
 };
 player.prototype.kill = function() {
     this.life -= 1;
@@ -44,7 +51,6 @@ var bullet = function(x, y, w, h) {
     this.y = y;
     this.w = 10;
     this.h = 10;
-
 };
 bullet.prototype.moveBullet = function() {
     this.y -= 16;
@@ -62,7 +68,6 @@ var baddies = function(x, y, w, h) {
     this.h = 30;
 };
 baddies.prototype.moveBaddies = function() {
-
     this.y -= -4;
 };
 baddies.prototype.drawBaddie = function() {
@@ -71,26 +76,27 @@ baddies.prototype.drawBaddie = function() {
 };
 var enemyArray = [new baddies(), new baddies(), new baddies(),
     new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies(),
-    new baddies(), new baddies()
+    new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies()
 ];
-
 var bullets = [];
-
-
 var player1 = new player();
 
-function draw() {
+function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    player1.drawPlayer();
+    drawscore();
 
+    player1.drawPlayer();
+    player1.drawlife();
+    // this instantiates new baddies so the game continues//////////
     if (enemyArray.length < 8) {
         enemyArray.push(new baddies());
     }
+    // this draws the array of baddies and moves the baddies down the screen///////////
     for (var i = 0; i < enemyArray.length; i++) {
         enemyArray[i].drawBaddie();
         enemyArray[i].moveBaddies();
     }
-
+    // this checks if player collides with enemies and if so, decrements player life until zero and then resets///
     function checkCollision(player, enemyArray) {
         for (var i = 0; i < enemyArray.length; i++) {
             if (player.x < enemyArray[i].x + enemyArray[i].w &&
@@ -98,25 +104,30 @@ function draw() {
                 player.y < enemyArray[i].y + enemyArray[i].h &&
                 player.y + player.h > enemyArray[i].y
             ) {
-                player1.y += 35;
-                player1.kill();
-                console.log(player1.life);
+                if (player1.life > 0) {
+                    player1.y += 35;
+                    player1.kill();
+                } else {
+                    document.location.reload();
+                }
             }
         }
     }
-    // console.log(player1);
     checkCollision(player1, enemyArray);
 
-
     // moves and draws new bullets to screen////////////
+
+
     if (bullets.length) {
         for (var k = 0; k < bullets.length; k++) {
-
             bullets[k].moveBullet();
             bullets[k].draw();
-
+            if (bullets[k].y < -10) {
+                bullets.shift();
+            }
         }
     }
+
     // checks for bullet collision/////////
     for (var f = 0; f < enemyArray.length; f++) {
         for (var j = 0; j < bullets.length; j++) {
@@ -127,6 +138,7 @@ function draw() {
                 bullets[j].y + bullets[j].h > enemyArray[f].y
             ) {
                 enemyArray.splice(f, 1);
+                score++;
             }
         }
     }
@@ -140,6 +152,7 @@ function draw() {
     if (bullets.length > 80) {
         bullets.shift();
     }
+
     // player movement and shooting////////////////////
 
     if (rightPressed && player1.x < 648) {
@@ -153,12 +166,19 @@ function draw() {
     } else if (upPressed && player1.y > 0) {
         player1.y -= 7;
     }
-    if (spacePressed) {
-        bullets.push(new bullet(player1.x, player1.y));
 
-    }
+    var fireRate = function() {
+        if (spacePressed) {
+            bullets.push(new bullet(player1.x, player1.y));
+        }
+    };
+
+    setInterval(fireRate(),0);
+
+
+    // requestAnimationFrame(gameLoop);
 }
-
+// gameLoop();
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
@@ -192,8 +212,10 @@ function keyUpHandler(event) {
     if (event.keyCode == 32) {
         spacePressed = false;
     }
+
 }
-setInterval(draw, 20);
+setInterval(gameLoop, 20);
+
 
 // function bulletCollision(bulletsArray, enemyArray) {
 //     for (var i = 0; i < enemyArray.length; i++) {

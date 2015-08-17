@@ -19,11 +19,13 @@ var leftPressed = false;
 var upPressed = false;
 var downPressed = false;
 var spacePressed = false;
+// draw the start screen
 var drawStart = function() {
     ctx.font = "14px Advanced Pixel LCD-7";
     ctx.fillStyle = "white";
     ctx.fillText("CLICK TO START", 240, 310);
 };
+
 //  DRAW SCORE TO SCREEN
 var score = 0;
 var drawscore = function() {
@@ -34,13 +36,14 @@ var drawscore = function() {
 //  DRAW YOU LOST TO SCREEN
 var drawYouLost = function() {
     ctx.font = "14px Advanced Pixel LCD-7";
-    ctx.fillStyle = "#0095DD";
-    ctx.fillText("You Lose, you score is" + score, 8, 40);
+    ctx.fillStyle = "white";
+    ctx.fillText("GAME OVER ", 240, 310);
+    ctx.fillText("Your Score: " + score, 240, 360);
+    ctx.fillText("CLICK TO RESTART", 240, 410);
     $(canvas).on("click", function() {
         document.location.reload();
     });
 };
-
 
 // PLAYER CODE ////////////////////////
 var player = function player(x, y, w, h) {
@@ -167,7 +170,7 @@ function gameLoop() {
         enemyArray[i].drawBaddie();
         enemyArray[i].moveBaddies();
     }
-    // this checks if player collides with enemies and if so, decrements player life until zero and then resets///
+    // this checks if player collides with enemies and if so, decrements player life until zero and then resets the game loop with score on screen///
     function checkCollision(player, enemyArray) {
         for (var i = 0; i < enemyArray.length; i++) {
             if (player.x < enemyArray[i].x + enemyArray[i].w &&
@@ -183,8 +186,9 @@ function gameLoop() {
 
                 } else if (player1.life <= 0) {
                     clearInterval(startGame);
+                    death.play();
                     drawYouLost();
-
+                    drawRestart();
                 }
             }
         }

@@ -4,6 +4,7 @@ var ctx = canvas.getContext("2d");
 // canvas dimensions and variables to work with
 var x = canvas.width / 2;
 var y = canvas.height - 400;
+var startGame = 0;
 
 // SOUND EFFECTS///////////
 var song = new Audio('We\'re all under the stars.mp3');
@@ -11,7 +12,7 @@ var shoot = new Audio('player shoots.m4a');
 var enemyDies = new Audio('enemy dies.m4a');
 var playerHit = new Audio('player gets hit.m4a');
 var death = new Audio('player dies.m4a');
-
+var extraLife = new Audio('extra life.m4a');
 // keyboard movement
 var rightPressed = false;
 var leftPressed = false;
@@ -30,6 +31,16 @@ var drawscore = function() {
     ctx.fillStyle = "#0095DD";
     ctx.fillText("Score: " + score, 8, 40);
 };
+//  DRAW YOU LOST TO SCREEN
+var drawYouLost = function() {
+    ctx.font = "14px Advanced Pixel LCD-7";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("You Lose, you score is" + score, 8, 40);
+    $(canvas).on("click", function() {
+        document.location.reload();
+    });
+};
+
 
 // PLAYER CODE ////////////////////////
 var player = function player(x, y, w, h) {
@@ -38,7 +49,7 @@ var player = function player(x, y, w, h) {
     this.h = 30;
     this.x = (canvas.width - this.w) / 2;
     this.y = canvas.height / 1.2;
-    this.life = 3;
+    this.life = 1;
 };
 player.prototype.drawlife = function() {
     ctx.font = "14px Advanced Pixel LCD-7";
@@ -47,6 +58,9 @@ player.prototype.drawlife = function() {
 };
 player.prototype.kill = function() {
     this.life -= 1;
+};
+player.prototype.addLife = function() {
+    this.life += 1;
 };
 player.prototype.drawPlayer = function() {
     ctx.fillStyle = "#0095DD";
@@ -90,14 +104,14 @@ var life = function(x, y, w, h) {
     this.h = 30;
 };
 life.prototype.moveLife = function() {
-    this.y -= -2;
+    this.y -= -12;
 };
 life.prototype.drawLife = function() {
-    ctx.fillStyle = "purple";
+    ctx.fillStyle = "white";
     ctx.fillRect(this.x, this.y, this.w, this.h);
 };
-var livesArray = [new life(),new life(),new life(),new life(),new life()];
 
+var livesArray = [new life()];
 
 var enemyArray = [new baddies(), new baddies(), new baddies(),
     new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies(),
@@ -108,12 +122,42 @@ var player1 = new player();
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-
-    lives.drawLife();
-
     player1.drawPlayer();
     player1.drawlife();
+
+
+    // draws and moves the Extra lives
+    for (var l = 0; l < livesArray.length; l++) {
+        livesArray[l].drawLife();
+        livesArray[l].moveLife();
+    }
+
+    function lifeCollision(player, livesArray) {
+        for (var i = 0; i < livesArray.length; i++) {
+            if (player.x < livesArray[i].x + livesArray[i].w &&
+                player.x + player.w > livesArray[i].x &&
+                player.y < livesArray[i].y + livesArray[i].h &&
+                player.y + player.h > livesArray[i].y
+            ) {
+                livesArray.splice(i, 1);
+                player.addLife();
+                extraLife.play();
+            }
+        }
+    }
+    lifeCollision(player1, livesArray);
+    //     for (var e = 0; e < livesArray.length; e++) {
+    //     if (player1.life <= 1) {
+    //         livesArray.push(new life());
+    //     }
+    // }
+    for (var e = 0; e < livesArray.length; e++) {
+        if (livesArray[e].y > 6400) {
+            livesArray.shift();
+            livesArray.push(new life());
+        }
+    }
+
     // this instantiates new baddies so the game continues//////////
     if (enemyArray.length < 15) {
         enemyArray.push(new baddies());
@@ -135,8 +179,12 @@ function gameLoop() {
                     player1.y += 35;
                     player1.kill();
                     playerHit.play();
-                } else {
-                    document.location.reload();
+                    livesArray.push(new life());
+
+                } else if (player1.life <= 0) {
+                    clearInterval(startGame);
+                    drawYouLost();
+
                 }
             }
         }
@@ -159,7 +207,6 @@ function gameLoop() {
     // checks for bullet collision/////////
     for (var f = 0; f < enemyArray.length; f++) {
         for (var j = 0; j < bullets.length; j++) {
-
             if (bullets[j].x < enemyArray[f].x + enemyArray[f].w &&
                 bullets[j].x + bullets[j].w > enemyArray[f].x &&
                 bullets[j].y < enemyArray[f].y + enemyArray[f].h &&
@@ -182,8 +229,9 @@ function gameLoop() {
         bullets.shift();
     }
 
-    // player movement and shooting////////////////////
 
+
+    // player movement and shooting////////////////////
     if (rightPressed && player1.x < 648) {
         player1.x += 7;
     } else if (leftPressed && player1.x > 0) {
@@ -199,14 +247,9 @@ function gameLoop() {
         shoot.play();
     }
 
-
-
     // var fireRate = function() {
-
     // };
-
     // setInterval(fireRate(), 0);
-
 
     // requestAnimationFrame(gameLoop);
     drawscore();
@@ -247,18 +290,18 @@ function keyUpHandler(event) {
     }
 }
 
-
 $(document).on("ready", function() {
     drawStart();
     song.play();
     $(canvas).on("click", function() {
 
-        setInterval(gameLoop, 20);
+        drawStart();
+        // var counter = 1;
+       startGame = setInterval(gameLoop, 20);
+        // console.log("Level " + counter);
+        // counter += 1;
     });
-
 });
-
-
 
 // function bulletCollision(bulletsArray, enemyArray) {
 //     for (var i = 0; i < enemyArray.length; i++) {

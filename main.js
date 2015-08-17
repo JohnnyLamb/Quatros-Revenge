@@ -11,14 +11,20 @@ var leftPressed = false;
 var upPressed = false;
 var downPressed = false;
 var spacePressed = false;
+var drawStart = function() {
+    ctx.font = "14px Advanced Pixel LCD-7";
+    ctx.fillStyle = "white";
+    ctx.fillText("CLICK TO START", 240, 310);
+};
 
 //  DRAW SCORE TO SCREEN
 var score = 0;
 var drawscore = function() {
-    ctx.font = "16px Arial";
+    ctx.font = "14px Advanced Pixel LCD-7";
     ctx.fillStyle = "#0095DD";
-    ctx.fillText("Score: " + score, 8, 20);
+    ctx.fillText("Score: " + score, 8, 40);
 };
+
 
 // PLAYER CODE ////////////////////////
 var player = function player(x, y, w, h) {
@@ -30,9 +36,9 @@ var player = function player(x, y, w, h) {
     this.life = 3;
 };
 player.prototype.drawlife = function() {
-    ctx.font = "16px Arial";
+    ctx.font = "14px Advanced Pixel LCD-7";
     ctx.fillStyle = "#0095DD";
-    ctx.fillText("LIFE: " + this.life, 600, 20);
+    ctx.fillText("LIFE: " + this.life, 560, 40);
 };
 player.prototype.kill = function() {
     this.life -= 1;
@@ -80,7 +86,7 @@ var player1 = new player();
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawscore();
+
 
     player1.drawPlayer();
     player1.drawlife();
@@ -164,16 +170,18 @@ function gameLoop() {
         player1.y -= 7;
     }
 
-    var fireRate = function() {
-        if (spacePressed) {
+    if (spacePressed) {
             bullets.push(new bullet(player1.x, player1.y));
         }
-    };
+    // var fireRate = function() {
 
-    setInterval(fireRate(),0);
+    // };
+
+    // setInterval(fireRate(), 0);
 
 
     // requestAnimationFrame(gameLoop);
+    drawscore();
 }
 // gameLoop();
 document.addEventListener("keydown", keyDownHandler, false);
@@ -209,9 +217,18 @@ function keyUpHandler(event) {
     if (event.keyCode == 32) {
         spacePressed = false;
     }
-
 }
-setInterval(gameLoop, 20);
+
+
+$(document).on("ready", function() {
+    drawStart();
+    $(canvas).on("click", function() {
+
+        setInterval(gameLoop, 20);
+    });
+
+});
+
 
 
 // function bulletCollision(bulletsArray, enemyArray) {

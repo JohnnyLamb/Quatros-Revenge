@@ -5,7 +5,8 @@ var ctx = canvas.getContext("2d");
 var x = canvas.width / 2;
 var y = canvas.height - 400;
 
-// SOUND EFFECT FUNCTIONS///////////
+// SOUND EFFECTS///////////
+var song = new Audio('We\'re all under the stars.mp3');
 var shoot = new Audio('player shoots.m4a');
 var enemyDies = new Audio('enemy dies.m4a');
 var playerHit = new Audio('player gets hit.m4a');
@@ -81,6 +82,23 @@ baddies.prototype.drawBaddie = function() {
     ctx.fillStyle = "red";
     ctx.fillRect(this.x, this.y, this.w, this.h);
 };
+
+var life = function(x, y, w, h) {
+    this.x = Math.random() * 600;
+    this.y = Math.random() * -600;
+    this.w = 30;
+    this.h = 30;
+};
+life.prototype.moveLife = function() {
+    this.y -= -2;
+};
+life.prototype.drawLife = function() {
+    ctx.fillStyle = "purple";
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+};
+var livesArray = [new life(),new life(),new life(),new life(),new life()];
+
+
 var enemyArray = [new baddies(), new baddies(), new baddies(),
     new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies(),
     new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies()
@@ -92,6 +110,7 @@ function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 
+    lives.drawLife();
 
     player1.drawPlayer();
     player1.drawlife();
@@ -231,6 +250,7 @@ function keyUpHandler(event) {
 
 $(document).on("ready", function() {
     drawStart();
+    song.play();
     $(canvas).on("click", function() {
 
         setInterval(gameLoop, 20);

@@ -5,6 +5,10 @@ var ctx = canvas.getContext("2d");
 var x = canvas.width / 2;
 var y = canvas.height - 400;
 
+// SOUND EFFECT FUNCTIONS///////////
+var shoot = new Audio('player shoots.m4a');
+var enemyDies = new Audio('enemy dies.m4a');
+
 // keyboard movement
 var rightPressed = false;
 var leftPressed = false;
@@ -16,7 +20,6 @@ var drawStart = function() {
     ctx.fillStyle = "white";
     ctx.fillText("CLICK TO START", 240, 310);
 };
-
 //  DRAW SCORE TO SCREEN
 var score = 0;
 var drawscore = function() {
@@ -24,7 +27,6 @@ var drawscore = function() {
     ctx.fillStyle = "#0095DD";
     ctx.fillText("Score: " + score, 8, 40);
 };
-
 
 // PLAYER CODE ////////////////////////
 var player = function player(x, y, w, h) {
@@ -87,6 +89,8 @@ var player1 = new player();
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    var playerHit = new Audio('player gets hit.wav');
+    var death = new Audio('player dies.wav');
 
     player1.drawPlayer();
     player1.drawlife();
@@ -110,7 +114,8 @@ function gameLoop() {
                 if (player1.life > 0) {
                     player1.y += 35;
                     player1.kill();
-                } else {
+                    playerHit.play();
+                } else{
                     document.location.reload();
                 }
             }
@@ -142,6 +147,7 @@ function gameLoop() {
             ) {
                 enemyArray.splice(f, 1);
                 score++;
+                enemyDies.play();
             }
         }
     }
@@ -163,16 +169,18 @@ function gameLoop() {
     } else if (leftPressed && player1.x > 0) {
         player1.x -= 7;
     }
-
     if (downPressed && player1.y < 588) {
         player1.y += 7;
     } else if (upPressed && player1.y > 0) {
         player1.y -= 7;
     }
-
     if (spacePressed) {
-            bullets.push(new bullet(player1.x, player1.y));
-        }
+        bullets.push(new bullet(player1.x, player1.y));
+        shoot.play();
+    }
+
+
+
     // var fireRate = function() {
 
     // };

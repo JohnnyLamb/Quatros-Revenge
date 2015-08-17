@@ -117,9 +117,10 @@ life.prototype.drawLife = function() {
 var livesArray = [new life()];
 
 var enemyArray = [new baddies(), new baddies(), new baddies(),
-    new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies(),
-    new baddies(), new baddies(), new baddies(), new baddies(), new baddies(), new baddies()
-];
+    new baddies(), new baddies(), new baddies(), new baddies(),
+    new baddies(), new baddies(),
+    new baddies(), new baddies(), new baddies(),
+     new baddies(), new baddies(), new baddies()];
 var bullets = [];
 var player1 = new player();
 
@@ -127,14 +128,11 @@ function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     player1.drawPlayer();
     player1.drawlife();
-
-
     // draws and moves the Extra lives
     for (var l = 0; l < livesArray.length; l++) {
         livesArray[l].drawLife();
         livesArray[l].moveLife();
     }
-
     function lifeCollision(player, livesArray) {
         for (var i = 0; i < livesArray.length; i++) {
             if (player.x < livesArray[i].x + livesArray[i].w &&
@@ -160,7 +158,6 @@ function gameLoop() {
             livesArray.push(new life());
         }
     }
-
     // this instantiates new baddies so the game continues//////////
     if (enemyArray.length < 15) {
         enemyArray.push(new baddies());
@@ -183,7 +180,6 @@ function gameLoop() {
                     player1.kill();
                     playerHit.play();
                     livesArray.push(new life());
-
                 } else if (player1.life <= 0) {
                     clearInterval(startGame);
                     death.play();
@@ -194,10 +190,7 @@ function gameLoop() {
         }
     }
     checkCollision(player1, enemyArray);
-
     // moves and draws new bullets to screen////////////
-
-
     if (bullets.length) {
         for (var k = 0; k < bullets.length; k++) {
             bullets[k].moveBullet();
@@ -207,7 +200,6 @@ function gameLoop() {
             }
         }
     }
-
     // checks for bullet collision/////////
     for (var f = 0; f < enemyArray.length; f++) {
         for (var j = 0; j < bullets.length; j++) {
@@ -232,9 +224,6 @@ function gameLoop() {
     if (bullets.length > 80) {
         bullets.shift();
     }
-
-
-
     // player movement and shooting////////////////////
     if (rightPressed && player1.x < 648) {
         player1.x += 7;
@@ -250,11 +239,9 @@ function gameLoop() {
         bullets.push(new bullet(player1.x, player1.y));
         shoot.play();
     }
-
     // var fireRate = function() {
     // };
     // setInterval(fireRate(), 0);
-
     // requestAnimationFrame(gameLoop);
     drawscore();
 }
@@ -277,7 +264,6 @@ function keyDownHandler(event) {
         spacePressed = true;
     }
 }
-
 function keyUpHandler(event) {
     if (event.keyCode == 38) {
         upPressed = false;
@@ -293,20 +279,17 @@ function keyUpHandler(event) {
         spacePressed = false;
     }
 }
-
 $(document).on("ready", function() {
     drawStart();
     song.play();
     $(canvas).on("click", function() {
-
         drawStart();
+        startGame = setInterval(gameLoop, 20);
         // var counter = 1;
-       startGame = setInterval(gameLoop, 20);
         // console.log("Level " + counter);
         // counter += 1;
     });
 });
-
 // function bulletCollision(bulletsArray, enemyArray) {
 //     for (var i = 0; i < enemyArray.length; i++) {
 //         for (var j = 0; j < bulletsArray.length; j++) {

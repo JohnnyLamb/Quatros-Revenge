@@ -8,6 +8,8 @@ var y = canvas.height - 400;
 // SOUND EFFECT FUNCTIONS///////////
 var shoot = new Audio('player shoots.m4a');
 var enemyDies = new Audio('enemy dies.m4a');
+var playerHit = new Audio('player gets hit.m4a');
+var death = new Audio('player dies.m4a');
 
 // keyboard movement
 var rightPressed = false;
@@ -89,8 +91,7 @@ var player1 = new player();
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    var playerHit = new Audio('player gets hit.wav');
-    var death = new Audio('player dies.wav');
+
 
     player1.drawPlayer();
     player1.drawlife();
@@ -115,7 +116,7 @@ function gameLoop() {
                     player1.y += 35;
                     player1.kill();
                     playerHit.play();
-                } else{
+                } else {
                     document.location.reload();
                 }
             }

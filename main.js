@@ -1,5 +1,5 @@
 
-
+var fattyArray = [new fatties()];
 var livesArray = [new life()];
 
 var enemyArray = [new baddies(), new baddies(), new baddies(),
@@ -15,7 +15,40 @@ function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     player1.drawPlayer();
     player1.drawlife();
+
+    for (var f = 0; f < fattyArray.length; f++) {
+        fattyArray[f].drawFatty();
+        fattyArray[f].moveFatty();
+    }
+
+    function fattyCollision(player, fattyArray) {
+        for (var i = 0; i < fattyArray.length; i++) {
+            if (player.x < fattyArray[i].x + fattyArray[i].w &&
+                player.x + player.w > fattyArray[i].x &&
+                player.y < fattyArray[i].y + fattyArray[i].h &&
+                player.y + player.h > fattyArray[i].y
+            ) {
+                fattyArray.splice(i, 1);
+                player1.w +=30;
+                player1.h +=30;
+                fattyArray.push(new fatties());
+                extraLife.play();
+            }
+        }
+    }
+    fattyCollision(player1, fattyArray);
+
+// if fatty is too far down screen respawn at top
+    for (var e = 0; e < fattyArray.length; e++) {
+        if (fattyArray[e].y > 6400) {
+            fattyArray.shift();
+            fattyArray.push(new fatties());
+        }
+    }
+
+
     // draws and moves the Extra lives
+
     for (var l = 0; l < livesArray.length; l++) {
         livesArray[l].drawLife();
         livesArray[l].moveLife();
@@ -35,11 +68,7 @@ function gameLoop() {
         }
     }
     lifeCollision(player1, livesArray);
-    //     for (var e = 0; e < livesArray.length; e++) {
-    //     if (player1.life <= 1) {
-    //         livesArray.push(new life());
-    //     }
-    // }
+
     for (var e = 0; e < livesArray.length; e++) {
         if (livesArray[e].y > 6400) {
             livesArray.shift();
@@ -72,7 +101,6 @@ function gameLoop() {
                     clearInterval(startGame);
                     death.play();
                     drawYouLost();
-                    drawRestart();
                 }
             }
         }

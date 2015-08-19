@@ -3,7 +3,6 @@ var drawStart = function() {
     ctx.fillStyle = "white";
     ctx.fillText("CLICK TO START", 240, 310);
 };
-
 //  DRAW SCORE TO SCREEN
 var score = 0;
 var drawscore = function() {
@@ -93,3 +92,19 @@ life.prototype.drawLife = function() {
     ctx.fillStyle = "white";
     ctx.fillRect(this.x, this.y, this.w, this.h);
 };
+
+var fatties = function(x, y, w, h) {
+    this.x = Math.random() * 600;
+    this.y = Math.random() * -600;
+    this.w = 30;
+    this.h = 30;
+};
+
+fatties.prototype.moveFatty = function() {
+    this.y -= -10;
+};
+fatties.prototype.drawFatty = function(){
+    ctx.fillStyle = "purple";
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+};
+

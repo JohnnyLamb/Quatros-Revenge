@@ -31,8 +31,9 @@ function gameLoop() {
                 fattyArray.splice(i, 1);
                 player1.w +=30;
                 player1.h +=30;
-                fattyArray.push(new fatties());
+                fattyArray.push(new fatties(),new fatties());
                 extraLife.play();
+                score += 50;
             }
         }
     }
@@ -40,7 +41,7 @@ function gameLoop() {
 
 // if fatty is too far down screen respawn at top
     for (var e = 0; e < fattyArray.length; e++) {
-        if (fattyArray[e].y > 6400) {
+        if (fattyArray[e].y > 1400) {
             fattyArray.shift();
             fattyArray.push(new fatties());
         }
@@ -64,6 +65,7 @@ function gameLoop() {
                 livesArray.splice(i, 1);
                 player.addLife();
                 extraLife.play();
+                livesArray.push(new life());
             }
         }
     }

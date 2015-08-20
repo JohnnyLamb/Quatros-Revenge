@@ -1,4 +1,4 @@
-space gane
+space game
 Purpose:
 
 use vanilla javascript without any help from librarys to create a canvas space shooter; exploring game logic and javascript animation.

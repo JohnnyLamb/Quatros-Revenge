@@ -7,12 +7,12 @@ var y = canvas.height - 400;
 var startGame = 0;
 
 // SOUND EFFECTS///////////
-var song = new Audio('We\'re all under the stars.mp3');
-var shoot = new Audio('player shoots.m4a');
-var enemyDies = new Audio('enemy dies.m4a');
-var playerHit = new Audio('player gets hit.m4a');
-var death = new Audio('player dies.m4a');
-var extraLife = new Audio('extra life.m4a');
+var song = new Audio('assets/We\'re all under the stars.mp3');
+var shoot = new Audio('assets/player shoots.m4a');
+var enemyDies = new Audio('assets/enemy dies.m4a');
+var playerHit = new Audio('assets/player gets hit.m4a');
+var death = new Audio('assets/player dies.m4a');
+var extraLife = new Audio('assets/extra life.m4a');
 // keyboard movement
 var rightPressed = false;
 var leftPressed = false;
@@ -65,10 +65,13 @@ player.prototype.kill = function() {
 player.prototype.addLife = function() {
     this.life += 1;
 };
+
+// try using drawImage()
 player.prototype.drawPlayer = function() {
     ctx.fillStyle = "#0095DD";
     ctx.fillRect(this.x, this.y, this.w, this.h);
 };
+
 // BULLET CODE
 
 var bullet = function(x, y, w, h) {
@@ -99,7 +102,6 @@ baddies.prototype.drawBaddie = function() {
     ctx.fillStyle = "red";
     ctx.fillRect(this.x, this.y, this.w, this.h);
 };
-
 var life = function(x, y, w, h) {
     this.x = Math.random() * 600;
     this.y = Math.random() * -600;
@@ -120,7 +122,8 @@ var enemyArray = [new baddies(), new baddies(), new baddies(),
     new baddies(), new baddies(), new baddies(), new baddies(),
     new baddies(), new baddies(),
     new baddies(), new baddies(), new baddies(),
-     new baddies(), new baddies(), new baddies()];
+    new baddies(), new baddies(), new baddies()
+];
 var bullets = [];
 var player1 = new player();
 
@@ -133,6 +136,7 @@ function gameLoop() {
         livesArray[l].drawLife();
         livesArray[l].moveLife();
     }
+
     function lifeCollision(player, livesArray) {
         for (var i = 0; i < livesArray.length; i++) {
             if (player.x < livesArray[i].x + livesArray[i].w &&
@@ -264,6 +268,7 @@ function keyDownHandler(event) {
         spacePressed = true;
     }
 }
+
 function keyUpHandler(event) {
     if (event.keyCode == 38) {
         upPressed = false;

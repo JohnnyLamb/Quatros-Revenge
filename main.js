@@ -211,11 +211,18 @@ function gameLoop() {
     } else if (upPressed && player1.y > 0) {
         player1.y -= 7;
     }
+    if (spacePressed) {
+        bullets.push(new bullet(player1.x, player1.y));
+
+        shoot.play();
+    }
+
     if (spacePressed && player1.state === 2) {
         bullets.push(new bullet(player1.x, player1.y));
         bulletsLeft.push(new bulletLeft(player1.x, player1.y));
         shoot.play();
     }
+
     // var fireRate = function() {
     // };
     // setInterval(fireRate(), 0);

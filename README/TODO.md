@@ -13,9 +13,12 @@
 
 5. make enemies shoot at Quatro
 
-6. save high scores
+6. save high scores in database
 
 7. add game loop to song
 
 8.explore set Interval and difference between requestanimationframe and why there is a bug with the latter but not the former when I use it
 
+9.power ups
+  -for cannon power up, create power up objects and take out player.state change from extra life collision logic and place it in powerup collision logic.
+  -make collision function for extra bullets.

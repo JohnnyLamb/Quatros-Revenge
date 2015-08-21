@@ -1,4 +1,4 @@
-var fattyArray = [new fatties()];
+var fattyArray = [new fatties(), new fatties()];
 var livesArray = [new life()];
 
 var enemyArray = [new baddies(), new baddies(), new baddies(),
@@ -10,7 +10,7 @@ var enemyArray = [new baddies(), new baddies(), new baddies(),
 var bullets = [];
 var player1 = new player();
 
-
+var skinnyArray = [new skinnies()];
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -20,6 +20,37 @@ function gameLoop() {
     //     if(score = 50){
     //     fattyArray.push(new fatties(),new fatties());
     // }
+
+    for (var f = 0; f < skinnyArray.length; f++) {
+        skinnyArray[f].drawSkinny();
+        skinnyArray[f].moveSkinny();
+    }
+
+    function skinnyCollision(player, skinnyArray) {
+        for (var i = 0; i < skinnyArray.length; i++) {
+            if (player.x < skinnyArray[i].x + skinnyArray[i].w &&
+                player.x + player.w > skinnyArray[i].x &&
+                player.y < skinnyArray[i].y + skinnyArray[i].h &&
+                player.y + player.h > skinnyArray[i].y
+            ) {
+                skinnyArray.splice(i, 1);
+                player1.w = 30;
+                player1.h = 30;
+                skinnyArray.push(new skinnies());
+                extraLife.play();
+
+            }
+        }
+    }
+    skinnyCollision(player1, skinnyArray);
+
+    for (var e = 0; e < skinnyArray.length; e++) {
+        if (skinnyArray[e].y > 700) {
+            skinnyArray.shift();
+            skinnyArray.push(new skinnies());
+        }
+    }
+
 
     for (var f = 0; f < fattyArray.length; f++) {
         fattyArray[f].drawFatty();
@@ -76,7 +107,7 @@ function gameLoop() {
     }
     lifeCollision(player1, livesArray);
 
-    for (var z= 0; z < livesArray.length; z++) {
+    for (var z = 0; z < livesArray.length; z++) {
         if (livesArray[z].y > 6400) {
             livesArray.shift();
             livesArray.push(new life());

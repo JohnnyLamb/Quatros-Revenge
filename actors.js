@@ -95,8 +95,8 @@ life.prototype.drawLife = function() {
 var fatties = function(x, y, w, h) {
     this.x = Math.random() * 600;
     this.y = Math.random() * -600;
-    this.w = 60;
-    this.h = 60;
+    this.w = 110;
+    this.h = 110;
 };
 fatties.prototype.moveFatty = function() {
     this.y -= -5;
@@ -105,3 +105,19 @@ fatties.prototype.drawFatty = function() {
     ctx.fillStyle = "purple";
     ctx.fillRect(this.x, this.y, this.w, this.h);
 };
+
+var skinnies = function(x, y, w, h) {
+    this.x = Math.random() * 600;
+    this.y = Math.random() * -600;
+    this.w = 30;
+    this.h = 30;
+};
+skinnies.prototype.moveSkinny = function() {
+    this.y -= -15;
+};
+skinnies.prototype.drawSkinny = function() {
+    ctx.fillStyle = "green";
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+};
+
+

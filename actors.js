@@ -57,12 +57,41 @@ var bullet = function(x, y, w, h) {
     this.h = 10;
 };
 bullet.prototype.moveBullet = function() {
-    this.y -= 16;
+
+    this.y -= 14;
 };
+
 bullet.prototype.draw = function() {
     ctx.fillStyle = "orange";
     ctx.fillRect(this.x + 10, this.y, 10, 10);
 };
+
+var bulletLeft = function(x, y, w, h) {
+    this.x = x;
+    this.y = y;
+    this.w = 10;
+    this.h = 10;
+};
+bulletLeft.prototype.moveBulletLeft = function() {
+    this.y -=20;
+    this.x -=13;
+};
+
+bulletLeft.prototype.drawLeft = function() {
+    ctx.fillStyle = "orange";
+    ctx.fillRect(this.x + 10, this.y, 10, 10);
+};
+
+// bullet.prototype.moveBulletRight = function() {
+
+//     this.x +=14;
+// };
+
+// bullet.prototype.moveBulletLeft = function() {
+
+//
+// };
+
 // BADDIES CODE////////////////////////////
 // var enemiesArray = [];
 var baddies = function(x, y, w, h) {
@@ -109,8 +138,8 @@ fatties.prototype.drawFatty = function() {
 var skinnies = function(x, y, w, h) {
     this.x = Math.random() * 600;
     this.y = Math.random() * -600;
-    this.w = 30;
-    this.h = 30;
+    this.w = 10;
+    this.h = 50;
 };
 skinnies.prototype.moveSkinny = function() {
     this.y -= -15;

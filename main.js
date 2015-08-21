@@ -8,6 +8,7 @@ var enemyArray = [new baddies(), new baddies(), new baddies(),
     new baddies(), new baddies(), new baddies()
 ];
 var bullets = [];
+var bulletsLeft=[];
 var player1 = new player();
 
 var skinnyArray = [new skinnies()];
@@ -36,22 +37,27 @@ function gameLoop() {
                 skinnyArray.splice(i, 1);
                 player1.w = 30;
                 player1.h = 30;
-                skinnyArray.push(new skinnies());
+                // skinnyArray.push(new skinnies());
+                fattyArray.shift();
                 extraLife.play();
 
             }
         }
     }
     skinnyCollision(player1, skinnyArray);
-
+    // if skinnies are too far off screen take some off
     for (var e = 0; e < skinnyArray.length; e++) {
-        if (skinnyArray[e].y > 700) {
+        if (skinnyArray[e].y > 2400) {
             skinnyArray.shift();
             skinnyArray.push(new skinnies());
         }
     }
 
+    // if (score >=50 && score <=51) {
+    //     skinnyArray.push(new skinnies());
+    // }
 
+    // move and draw fatties
     for (var f = 0; f < fattyArray.length; f++) {
         fattyArray[f].drawFatty();
         fattyArray[f].moveFatty();
@@ -67,7 +73,7 @@ function gameLoop() {
                 fattyArray.splice(i, 1);
                 player1.w += 30;
                 player1.h += 30;
-                fattyArray.push(new fatties(), new fatties());
+                skinnyArray.push(new skinnies());
                 extraLife.play();
                 score += 50;
             }
@@ -77,9 +83,9 @@ function gameLoop() {
 
     // if fatty is too far down screen respawn at top
     for (var e = 0; e < fattyArray.length; e++) {
-        if (fattyArray[e].y > 1400) {
+        if (fattyArray[e].y > 2400) {
             fattyArray.shift();
-            fattyArray.push(new fatties());
+            fattyArray.push(new fatties(), new fatties());
         }
     }
 
@@ -110,7 +116,7 @@ function gameLoop() {
     for (var z = 0; z < livesArray.length; z++) {
         if (livesArray[z].y > 6400) {
             livesArray.shift();
-            livesArray.push(new life());
+
         }
     }
     // this instantiates new baddies so the game continues//////////
@@ -147,10 +153,25 @@ function gameLoop() {
     // moves and draws new bullets to screen////////////
     if (bullets.length) {
         for (var k = 0; k < bullets.length; k++) {
+
             bullets[k].moveBullet();
+            // bullets[k].moveBulletRight();
+            // bullets[k].moveBulletLeft();
             bullets[k].draw();
             if (bullets[k].y < -10) {
                 bullets.shift();
+            }
+        }
+    }
+    if (bulletsLeft.length) {
+        for (var k = 0; k < bulletsLeft.length; k++) {
+
+            bulletsLeft[k].moveBulletLeft();
+            // bulletsLeft[k].moveBulletRight();
+            // bulletsLeft[k].moveBulletLeft();
+            bulletsLeft[k].drawLeft();
+            if (bulletsLeft[k].y < -10) {
+                bulletsLeft.shift();
             }
         }
     }
@@ -170,7 +191,7 @@ function gameLoop() {
     }
     //  destroys the enemy if they are too far off the screen////////////
     for (var n = 0; n < enemyArray.length; n++) {
-        if (enemyArray[e].y > 1400) {
+        if (enemyArray[n].y > 1400) {
             enemyArray.shift();
         }
     }
@@ -191,6 +212,7 @@ function gameLoop() {
     }
     if (spacePressed) {
         bullets.push(new bullet(player1.x, player1.y));
+        bulletsLeft.push(new bulletLeft(player1.x, player1.y));
         shoot.play();
     }
     // var fireRate = function() {

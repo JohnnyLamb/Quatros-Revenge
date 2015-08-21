@@ -29,6 +29,7 @@ var player = function player(x, y, w, h) {
     this.x = (canvas.width - this.w) / 2;
     this.y = canvas.height / 1.2;
     this.life = 1;
+    this.state = 1;
 };
 player.prototype.drawlife = function() {
     ctx.font = "14px Advanced Pixel LCD-7";

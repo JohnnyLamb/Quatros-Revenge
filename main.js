@@ -106,6 +106,7 @@ function gameLoop() {
             ) {
                 livesArray.splice(i, 1);
                 player.addLife();
+                player.state = 2;
                 extraLife.play();
                 livesArray.push(new life());
             }
@@ -210,7 +211,7 @@ function gameLoop() {
     } else if (upPressed && player1.y > 0) {
         player1.y -= 7;
     }
-    if (spacePressed) {
+    if (spacePressed && player1.state === 2) {
         bullets.push(new bullet(player1.x, player1.y));
         bulletsLeft.push(new bulletLeft(player1.x, player1.y));
         shoot.play();

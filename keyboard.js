@@ -1,5 +1,7 @@
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+
+
 function keyDownHandler(event) {
     if (event.keyCode == 38) {
         upPressed = true;
@@ -11,10 +13,11 @@ function keyDownHandler(event) {
     } else if (event.keyCode == 39) {
         rightPressed = true;
     }
-    if (event.keyCode == 32) {
-        spacePressed = true;
-    }
+    // if (event.keyCode == 32) {
+    //     spacePressed = true;
+    // }
 }
+
 function keyUpHandler(event) {
     if (event.keyCode == 38) {
         upPressed = false;
@@ -26,7 +29,9 @@ function keyUpHandler(event) {
     } else if (event.keyCode == 39) {
         rightPressed = false;
     }
-    if (event.keyCode == 32) {
-        spacePressed = false;
-    }
+    // if (event.keyCode == 32) {
+    //     spacePressed = false;
+    // }
 }
+
+

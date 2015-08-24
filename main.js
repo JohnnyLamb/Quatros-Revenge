@@ -8,10 +8,11 @@ var enemyArray = [new baddies(), new baddies(), new baddies(),
     new baddies(), new baddies(), new baddies()
 ];
 var bullets = [];
-var bulletsLeft=[];
+var bulletsLeft = [];
 var player1 = new player();
 
 var skinnyArray = [new skinnies()];
+document.addEventListener("keypress", spaceBar, false);
 
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -223,13 +224,27 @@ function gameLoop() {
         shoot.play();
     }
 
+
+
     // var fireRate = function() {
     // };
     // setInterval(fireRate(), 0);
     // requestAnimationFrame(gameLoop);
     drawscore();
+
+
+
+
 }
 // gameLoop();
+
+    function spaceBar(event) {
+        if (event.keyCode === 32) {
+            bullets.push(new bullet(player1.x, player1.y));
+            shoot.play();
+        }
+    }
+
 
 $(document).on("ready", function() {
     drawStart();

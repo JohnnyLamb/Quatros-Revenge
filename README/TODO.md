@@ -22,3 +22,5 @@
 9.power ups
   -for cannon power up, create power up objects and take out player.state change from extra life collision logic and place it in powerup collision logic.
   -make collision function for extra bullets.
+
+10. CREATED LEVEL LOGIC for increasing difficulty and game variety
